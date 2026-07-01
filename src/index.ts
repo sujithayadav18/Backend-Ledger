@@ -1,7 +1,13 @@
 import express from "express";
+import authRouter from "./routes/auth.routes.js";
+import { connectToDatabase } from "./config/db.js";
 
 const app = express();
-import { connectToDatabase } from "./config/db.js";
+
+app.use(express.json());
+
+app.use("/api/auth", authRouter);
+
 
 connectToDatabase();
 
