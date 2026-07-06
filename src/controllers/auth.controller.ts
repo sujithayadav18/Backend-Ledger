@@ -2,6 +2,8 @@ import userModel from "../models/user.model.js";
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken"
 
+
+//User registration controller
 async function registerUserController(req: { body: { username: string; email: string; password: string; }; }, res: any) {
   const { username, email, password } = req.body;
 

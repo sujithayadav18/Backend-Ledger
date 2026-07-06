@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+
+//User Schema
 const userSchema = new mongoose.Schema({
     username: { type: String, required: [true, "Username is required for creating a user"], unique: true },
     email: {
