@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: [true, "Password is required for creating a user"], minlength: [8, "Password must be at least 8 characters long"], select:false },
 }, { timestamps: true });
 
+//hashing of password before saving to database
 userSchema.pre("save", async function () {
     if (!this.isModified("password")) {
         return;
@@ -21,6 +22,7 @@ userSchema.pre("save", async function () {
     this.password = hash;
 });
 
+//method to compare password for login
 userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
     return await bcrypt.compare(candidatePassword, this.password);
 }
