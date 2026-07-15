@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken"
 //User registration controller
 async function registerUserController(req: { body: { username: string; email: string; password: string; }; }, res: any) {
   const { username, email, password } = req.body;
-
+  //checking if the user already exists in the database
   const isExistingUser = await User.findOne({ $or: [{ username }, { email }] });
 
   if(isExistingUser) {
@@ -14,6 +14,7 @@ async function registerUserController(req: { body: { username: string; email: st
   }
   const user = await userModel.create({ username, email, password });
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET as string, { expiresIn: "3d" });
+  //setting the token in the cookie
   res.cookie("token", token);
   res.status(201).json({ 
     user:{
@@ -31,17 +32,20 @@ async function registerUserController(req: { body: { username: string; email: st
 async function loginUserController(req: { body: { email: string; password: string; }; }, res: any) {
   const { email, password } = req.body;
 
+  //checking if the user exists in the database
   const user = await userModel.findOne({ email }).select("+password");
   if (!user) {
     return res.status(401).json({ message: "Invalid email or password", status: "failed" });
   }
 
+  //comapring password using the comparePassword method defined in the user model
   const isMatch = await (user as any).comparePassword(password);
   if (!isMatch) {
     return res.status(401).json({ message: "Invalid email or password", status: "failed" });
   }
 
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET as string, { expiresIn: "3d" });
+  //setting the token in the cookie
   res.cookie("token", token);
   res.status(200).json({ 
     user:{
