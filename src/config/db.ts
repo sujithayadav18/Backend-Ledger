@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+//fetch Value for the given environment variable name
 function getEnv(name: string): string {
   const value = process.env[name];
 
@@ -13,6 +14,7 @@ function getEnv(name: string): string {
   return value;
 }
 
+//connecting to DB
 export function connectToDatabase() {
   const uri = getEnv("MONGODB_URI");
 
